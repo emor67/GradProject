@@ -31,9 +31,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // Check if the player is grounded
         GroundCheck();
 
+        MoveWithCamera();
+
+        Jump();
+    }
+
+    private void GroundCheck()
+    {
+        // Perform a raycast to check if the player is grounded
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+
+        // Debug visualization of the ground check
+        Debug.DrawRay(transform.position, Vector3.down * groundCheckDistance, isGrounded ? Color.green : Color.red);
+    }
+
+    private void MoveWithCamera(){
         // Read the "Move" action value
         Vector2 moveValue = moveAction.action.ReadValue<Vector2>();
 
@@ -60,20 +74,13 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
+    }
 
+    private void Jump(){
         // Check if the jump button is pressed and player is grounded
         if (jumpAction.action.WasPressedThisFrame() && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
-    }
-
-    private void GroundCheck()
-    {
-        // Perform a raycast to check if the player is grounded
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
-
-        // Debug visualization of the ground check
-        Debug.DrawRay(transform.position, Vector3.down * groundCheckDistance, isGrounded ? Color.green : Color.red);
     }
 }
