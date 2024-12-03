@@ -10,6 +10,10 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float groundCheckDistance = 0.1f; // Distance for ground check
+    [SerializeField] private LayerMask groundLayer; // Layer mask for ground detection
+
+    private bool isGrounded;
 
     private void Start()
     {
@@ -27,6 +31,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        // Check if the player is grounded
+        GroundCheck();
+
         // Read the "Move" action value
         Vector2 moveValue = moveAction.action.ReadValue<Vector2>();
 
@@ -55,9 +62,18 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Check if the jump button is pressed and player is grounded
-        if (jumpAction.action.WasPressedThisFrame())
+        if (jumpAction.action.WasPressedThisFrame() && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+    }
+
+    private void GroundCheck()
+    {
+        // Perform a raycast to check if the player is grounded
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+
+        // Debug visualization of the ground check
+        Debug.DrawRay(transform.position, Vector3.down * groundCheckDistance, isGrounded ? Color.green : Color.red);
     }
 }
