@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - CameraTrigger
+  - coin
   layers:
   - Default
   - TransparentFX
