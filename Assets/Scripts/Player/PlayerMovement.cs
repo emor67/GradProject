@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     private void GroundCheck()
     {
         // Perform a raycast to check if the player is grounded
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+        isGrounded = Physics.Raycast(transform.position + new Vector3(0f,0.04f,0f), Vector3.down, groundCheckDistance, groundLayer);
 
         // Debug visualization of the ground check
         Debug.DrawRay(transform.position, Vector3.down * groundCheckDistance, isGrounded ? Color.green : Color.red);
