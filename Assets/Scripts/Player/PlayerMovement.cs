@@ -6,7 +6,8 @@ public class PlayerMovement : MonoBehaviour
     public InputActionReference moveAction;
     public InputActionReference jumpAction;
     public Transform cameraTransform; // Reference to the camera's transform
-    private Rigidbody rb;
+    public Animator animator;
+    private Rigidbody _rb;
 
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 5f;
@@ -17,8 +18,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        if (rb == null)
+        _rb = GetComponent<Rigidbody>();
+        if (_rb == null)
         {
             Debug.LogError("Rigidbody component not found on the Player!");
         }
@@ -27,6 +28,9 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.LogError("Camera transform is not assigned!");
         }
+        animator.SetBool("jump", false);
+        animator.SetBool("ible", true);
+        animator.SetBool("run", false);
     }
 
     private void Update()
@@ -65,8 +69,12 @@ public class PlayerMovement : MonoBehaviour
         Vector3 moveDirection = (cameraForward * moveValue.y + cameraRight * moveValue.x) * moveSpeed;
 
         // Apply movement
-        Vector3 velocity = rb.linearVelocity;
-        rb.linearVelocity = new Vector3(moveDirection.x, velocity.y, moveDirection.z);
+        Vector3 velocity = _rb.linearVelocity;
+        _rb.linearVelocity = new Vector3(moveDirection.x, velocity.y, moveDirection.z);
+
+        animator.SetBool("jump", false);
+        animator.SetBool("ible", false);
+        animator.SetBool("run", true);
 
         // Rotate player to face the movement direction
         if (moveDirection.sqrMagnitude > 0.01f) // Avoid tiny movements
@@ -80,7 +88,10 @@ public class PlayerMovement : MonoBehaviour
         // Check if the jump button is pressed and player is grounded
         if (jumpAction.action.WasPressedThisFrame() && isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            animator.SetBool("jump", true);
+            animator.SetBool("ible", false);
+            animator.SetBool("run", false);
         }
     }
 }

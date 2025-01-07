@@ -6,7 +6,7 @@ public class CoinAnimDOTween : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        DOTween.SetTweensCapacity(500,50);
+        DOTween.SetTweensCapacity(1250,50);
         transform.DOLocalRotate(new Vector3(90,0,360), 6f, RotateMode.FastBeyond360).SetLoops(-1).SetEase(Ease.Linear);
         transform.DOScale(new Vector3(120f,120f,120f), 2f).SetEase(Ease.InOutSine).OnComplete(()=> {
             ScaleBack();
