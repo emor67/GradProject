@@ -21,6 +21,6 @@ public class CoinCollector : MonoBehaviour
     }
 
     private void UpdateCoinText(){
-        coinText.text = "Coins: " + coinsCollected.ToString();
+        coinText.text = "Makaronies: " + coinsCollected.ToString() + "/ 146";
     }
 }
